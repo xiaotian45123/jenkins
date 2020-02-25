@@ -44,19 +44,13 @@ spec:
             - name: jenkins-home
               mountPath: /var/jenkins_home
           livenessProbe:
-            httpGet:
-              path: /login
-              port: 8080
+            failureThreshold: 12
             initialDelaySeconds: 60
-            timeoutSeconds: 5
-            failureThreshold: 12 # ~2 minutes
-          readinessProbe:
-            httpGet:
-              path: /login
+            periodSeconds: 30
+            successThreshold: 1
+            tcpSocket:
               port: 8080
-            initialDelaySeconds: 60
             timeoutSeconds: 5
-            failureThreshold: 12 # ~2 minutes
       securityContext:
         fsGroup: 1000
       volumes:
