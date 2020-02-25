@@ -30,29 +30,31 @@ spec:
           image: jenkins/jenkins:lts-alpine
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 30080
+            - containerPort: 8080
               name: http
               protocol: TCP
-            - containerPort: 30081
+            - containerPort: 50000
               name: agent
               protocol: TCP
           resources:
             limits:
-              cpu: 1
-              memory: 2Gi
+              cpu: 2
+              memory: 4Gi
             requests:
               cpu: 0.5
-              memory: 1Gi
+              memory: 2Gi
           env:
-            - name: JENKINS_HOME
-              value: /var/lib/jenkins
-            - name: JENKINS_OPTS 
-              value: --httpPort=30080
-            - name: JENKINS_SLAVE_AGENT_PORT
-              value: "30081"
+            - name: LIMITS_MEMORY
+              valueFrom:
+                resourceFieldRef:
+                  resource: limits.memory
+                  divisor: 1Mi
+            - name: JAVA_OPTS
+              # value: -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=1 -XshowSettings:vm -Dhudson.slaves.NodeProvisioner.initialDelay=0 -Dhudson.slaves.NodeProvisioner.MARGIN=50 -Dhudson.slaves.NodeProvisioner.MARGIN0=0.85
+              value: -Xmx$(LIMITS_MEMORY)m -XshowSettings:vm -Dhudson.slaves.NodeProvisioner.initialDelay=0 -Dhudson.slaves.NodeProvisioner.MARGIN=50 -Dhudson.slaves.NodeProvisioner.MARGIN0=0.85
           volumeMounts:
             - name: jenkins-home
-              mountPath: /var/lib/jenkins
+              mountPath: /var/jenkins_home
           livenessProbe:
             httpGet:
               path: /login
@@ -73,7 +75,7 @@ spec:
         - name: jenkins-home
           hostPath: 
             path: /data/devops/jenkins
-            type: Directory
+            type: DirectoryOrCreate
 
 ---
 apiVersion: v1
