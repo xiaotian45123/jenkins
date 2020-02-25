@@ -31,24 +31,20 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
-              name: http
-              protocol: TCP
             - containerPort: 50000
-              name: agent
-              protocol: TCP
           resources:
             limits:
               cpu: 2
               memory: 4Gi
             requests:
               cpu: 0.5
-              memory: 2Gi
+              memory: 500Mi
           env:
             - name: LIMITS_MEMORY
               valueFrom:
                 resourceFieldRef:
                   resource: limits.memory
-                  divisor: 1Mi
+                  divisor: 256Mi
             - name: JAVA_OPTS
               # value: -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=1 -XshowSettings:vm -Dhudson.slaves.NodeProvisioner.initialDelay=0 -Dhudson.slaves.NodeProvisioner.MARGIN=50 -Dhudson.slaves.NodeProvisioner.MARGIN0=0.85
               value: -Xmx$(LIMITS_MEMORY)m -XshowSettings:vm -Dhudson.slaves.NodeProvisioner.initialDelay=0 -Dhudson.slaves.NodeProvisioner.MARGIN=50 -Dhudson.slaves.NodeProvisioner.MARGIN0=0.85
