@@ -21,13 +21,13 @@ spec:
       labels:
         name: jenkins
     spec:
-      terminationGracePeriodSeconds: 25
+      terminationGracePeriodSeconds: 10
       serviceAccountName: jenkins
       nodeSelector: 
         kubernetes.io/hostname: cn-shenzhen.192.168.100.167
       containers:
         - name: jenkins
-          image: jenkins/jenkins:lts-alpine
+          image: jenkins/jenkins:lts
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
