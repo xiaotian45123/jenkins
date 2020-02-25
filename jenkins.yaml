@@ -58,14 +58,14 @@ spec:
           livenessProbe:
             httpGet:
               path: /login
-              port: 30080
+              port: 8080
             initialDelaySeconds: 60
             timeoutSeconds: 5
             failureThreshold: 12 # ~2 minutes
           readinessProbe:
             httpGet:
               path: /login
-              port: 30080
+              port: 8080
             initialDelaySeconds: 60
             timeoutSeconds: 5
             failureThreshold: 12 # ~2 minutes
@@ -89,13 +89,13 @@ spec:
   type: NodePort
   ports:
     - name: http
-      port: 30080
-      targetPort: 30080
+      port: 8080
+      targetPort: 8080
       nodePort: 30080
       protocol: TCP
     - name: agent
-      port: 30081
-      targetPort: 30081
+      port: 50000
+      targetPort: 50000
       nodePort: 30081
       protocol: TCP
 
