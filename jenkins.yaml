@@ -27,7 +27,7 @@ spec:
         kubernetes.io/hostname: cn-shenzhen.192.168.100.167
       containers:
         - name: jenkins
-          image: jenkins/jenkins:lts
+          image: jenkinsci/blueocean:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
